@@ -16,6 +16,7 @@ public class GameWindow {
 
         frame.add(panel.asComponent());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
         frame.setSize(windowSize);
         frame.setVisible(true); // must be the last operation
     }
