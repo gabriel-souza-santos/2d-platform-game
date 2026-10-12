@@ -16,6 +16,7 @@ public class GamePanel{
         mouse = new MouseInput();
 
         panel = new JPanel() {
+            @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 render(g);
