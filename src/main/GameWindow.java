@@ -21,4 +21,8 @@ public class GameWindow {
         frame.setLocationRelativeTo(null); // Centers the window, must be call after setting size
         frame.setVisible(true); // Must be the last operation
     }
+
+    public JFrame asComponent() {
+        return frame;
+    }
 }
