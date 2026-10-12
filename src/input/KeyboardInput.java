@@ -2,8 +2,20 @@ package input;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.EnumSet;
+import java.util.Optional;
+import java.util.Set;
 
 public class KeyboardInput implements KeyListener {
+    private final Set<KeyAction> heldKeys;
+
+    public KeyboardInput() {
+        heldKeys = EnumSet.noneOf(KeyAction.class);
+    }
+
+    public boolean isHeld(KeyAction key) {
+        return heldKeys.contains(key);
+    }
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -12,31 +24,13 @@ public class KeyboardInput implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        switch (e.getKeyCode()) {
-            case KeyEvent.VK_UP, KeyEvent.VK_W -> {
-                // TODO
-            }
-
-            case KeyEvent.VK_LEFT, KeyEvent.VK_A -> {
-                // TODO
-            }
-
-            case KeyEvent.VK_DOWN, KeyEvent.VK_S -> {
-                // TODO
-            }
-
-            case KeyEvent.VK_RIGHT, KeyEvent.VK_D -> {
-                // TODO
-            }
-
-            default -> {
-                // TODO
-            }
-        }
+        Optional<KeyAction> key = KeyAction.fromKeyCode(e.getKeyCode());
+        key.ifPresent(heldKeys::add);
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        // TODO
+        Optional<KeyAction> key = KeyAction.fromKeyCode(e.getKeyCode());
+        key.ifPresent(heldKeys::remove);
     }
 }
