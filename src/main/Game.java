@@ -7,5 +7,6 @@ public class Game {
     public Game() {
         panel = new GamePanel();
         window = new GameWindow(panel);
+        panel.requestFocus(); // Gets the input focus
     }
 }
