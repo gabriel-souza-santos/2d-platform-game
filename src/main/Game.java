@@ -2,6 +2,7 @@ package main;
 
 import engine.Renderable;
 import engine.Updatable;
+import entity.Player;
 import input.KeyboardInput;
 import input.MouseInput;
 
@@ -20,6 +21,8 @@ public class Game implements Runnable, Renderable, Updatable {
     private KeyboardInput keyboard;
     private MouseInput mouse;
 
+    private Player player;
+
     // FIXME: Starting a thread inside the constructor creates a race condition with object initialization.
     // TODO: Refactor to use a static factory method (e.g., Game.launch()) or explicit game.start() call in Main.
     public Game() {
@@ -30,6 +33,7 @@ public class Game implements Runnable, Renderable, Updatable {
     public void initComponents() {
         keyboard = new KeyboardInput();
         mouse = new MouseInput();
+        player = new Player(keyboard, mouse);
 
         panel = new GamePanel(this, keyboard, mouse);
         window = new GameWindow(panel);
@@ -48,15 +52,15 @@ public class Game implements Runnable, Renderable, Updatable {
 
     @Override
     public void update(double deltaTimeS) {
-        // TODO
-
+        player.update(deltaTimeS);
         keyboard.endFrame();
         mouse.endFrame();
     }
 
     @Override
     public void render(Graphics g) {
-        // TODO
+        // TODO: Show FPS and UPS on the screen
+        player.render(g);
     }
 
     @Override
