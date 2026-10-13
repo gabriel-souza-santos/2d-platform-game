@@ -6,6 +6,7 @@ import java.util.EnumSet;
 import java.util.Optional;
 import java.util.Set;
 
+// FIXME: Ensure consistent keyboard reads on threaded environment
 public class KeyboardInput implements KeyListener {
     private final Set<KeyAction> heldKeys;
     private final Set<KeyAction> pressedKeys;
