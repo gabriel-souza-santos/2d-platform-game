@@ -77,12 +77,12 @@ public class Game implements Runnable, Renderable, Updatable {
             deltaRender += elapsedTimeNS / timePerFrameNS;
             deltaUpdate += elapsedTimeNS / timePerUpdateNS;
 
-            while (deltaUpdate >= 1) {
+            while (deltaUpdate >= 1.0) {
                 update(deltaTimeS);
                 deltaUpdate--;
             }
 
-            if (deltaRender >= 1) {
+            if (deltaRender >= 1.0) {
                 panel.repaint();
                 deltaRender--;
             }

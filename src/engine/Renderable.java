@@ -3,5 +3,5 @@ package engine;
 import java.awt.Graphics;
 
 public interface Renderable {
-    public void render(Graphics g);
+    void render(Graphics g);
 }

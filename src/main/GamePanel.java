@@ -7,7 +7,7 @@ import input.MouseInput;
 import javax.swing.JPanel;
 import java.awt.Graphics;
 
-public class GamePanel{
+public class GamePanel {
     private final JPanel panel;
 
     public GamePanel(Renderable game, KeyboardInput keyboard, MouseInput mouse) {

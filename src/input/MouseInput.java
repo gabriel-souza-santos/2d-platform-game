@@ -3,7 +3,6 @@ package input;
 import java.awt.event.*;
 
 public class MouseInput implements MouseListener, MouseMotionListener, MouseWheelListener {
-
     public void endFrame() {
         // TODO
     }
