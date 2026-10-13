@@ -1,25 +1,21 @@
 package main;
 
+import engine.Renderable;
 import input.KeyboardInput;
 import input.MouseInput;
 
 import javax.swing.JPanel;
 import java.awt.Graphics;
 
-public class GamePanel{
+public class GamePanel {
     private final JPanel panel;
-    private final KeyboardInput keyboard;
-    private final MouseInput mouse;
 
-    public GamePanel() {
-        keyboard = new KeyboardInput();
-        mouse = new MouseInput();
-
+    public GamePanel(Renderable game, KeyboardInput keyboard, MouseInput mouse) {
         panel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                render(g);
+                game.render(g);
             }
         };
 
@@ -27,10 +23,6 @@ public class GamePanel{
         panel.addMouseListener(mouse);
         panel.addMouseMotionListener(mouse);
         panel.addMouseWheelListener(mouse);
-    }
-
-    public void render(Graphics g) {
-        g.fillRect(100, 100, 200, 200);
     }
 
     public void repaint() {
