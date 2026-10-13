@@ -1,14 +1,24 @@
 package main;
 
-public class Game implements Runnable {
+import engine.Renderable;
+import engine.Updatable;
+import input.KeyboardInput;
+import input.MouseInput;
+
+import java.awt.Graphics;
+
+public class Game implements Runnable, Renderable, Updatable {
     public static long TARGET_FPS = 120;
     public static long TARGET_UPS = 120;
 
-    private static volatile boolean keepRunning;
-    private static Thread gameThread;
+    private volatile boolean keepRunning;
+    private Thread gameThread;
 
-    private static GameWindow window;
-    private static GamePanel panel;
+    private GameWindow window;
+    private GamePanel panel;
+
+    private KeyboardInput keyboard;
+    private MouseInput mouse;
 
     // FIXME: Starting a thread inside the constructor creates a race condition with object initialization.
     // TODO: Refactor to use a static factory method (e.g., Game.launch()) or explicit game.start() call in Main.
@@ -18,7 +28,10 @@ public class Game implements Runnable {
     }
 
     public void initComponents() {
-        panel = new GamePanel();
+        keyboard = new KeyboardInput();
+        mouse = new MouseInput();
+
+        panel = new GamePanel(this, keyboard, mouse);
         window = new GameWindow(panel);
         panel.requestFocus(); // Gets the input focus
     }
@@ -33,23 +46,27 @@ public class Game implements Runnable {
         keepRunning = false;
     }
 
-    public void update() {
+    @Override
+    public void update(double deltaTimeS) {
         // TODO
+
+        keyboard.endFrame();
+        mouse.endFrame();
     }
 
-    public void render() {
+    @Override
+    public void render(Graphics g) {
         // TODO
-        panel.repaint();
     }
 
     @Override
     public void run() {
         double timePerFrameNS = 1_000_000_000.0 / TARGET_FPS;
         double timePerUpdateNS = 1_000_000_000.0 / TARGET_UPS;
+        double deltaTimeS = 1.0 / TARGET_UPS;
 
         double deltaRender = 0.0;
         double deltaUpdate = 0.0;
-
         long lastTimeNS = System.nanoTime();
 
         while (keepRunning) {
@@ -61,12 +78,12 @@ public class Game implements Runnable {
             deltaUpdate += elapsedTimeNS / timePerUpdateNS;
 
             while (deltaUpdate >= 1) {
-                update();
+                update(deltaTimeS);
                 deltaUpdate--;
             }
 
             if (deltaRender >= 1) {
-                render();
+                panel.repaint();
                 deltaRender--;
             }
         }
