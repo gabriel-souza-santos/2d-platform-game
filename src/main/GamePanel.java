@@ -12,22 +12,7 @@ public class GamePanel {
     private final JPanel panel;
 
     public GamePanel(Renderable game, KeyboardInput keyboard, MouseInput mouse) {
-        panel = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-
-                // Safety: Since Java 1.2, Swing passes a Graphics2D to paintComponent
-                Graphics2D g2d = (Graphics2D) g.create();
-                // TODO: Add rendering hints
-
-                try {
-                    game.render(g2d);
-                } finally {
-                    g2d.dispose();
-                }
-            }
-        };
+        panel = buildPanel(game);
 
         panel.addKeyListener(keyboard);
         panel.addMouseListener(mouse);
@@ -44,5 +29,23 @@ public class GamePanel {
 
     public JPanel asComponent() {
         return panel;
+    }
+
+    private JPanel buildPanel(Renderable game) {
+        return new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+
+                Graphics2D g2d = (Graphics2D) g.create(); // Swing provides Graphics2D since Java 1.2
+                // TODO: Add rendering hints
+
+                try {
+                    game.render(g2d);
+                } finally {
+                    g2d.dispose();
+                }
+            }
+        };
     }
 }
