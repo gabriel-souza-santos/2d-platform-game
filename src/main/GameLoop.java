@@ -7,6 +7,7 @@ public class GameLoop implements Runnable {
     public static final long TARGET_UPS = 120;
 
     private volatile boolean keepRunning = false;
+    private volatile long timePlayedNS = 0;
 
     private final Updatable game;
     private final GamePanel panel;
@@ -22,6 +23,10 @@ public class GameLoop implements Runnable {
 
     public void stop() {
         keepRunning = false;
+    }
+
+    public long getTimePlayedNS() {
+        return timePlayedNS;
     }
 
     @Override
@@ -41,6 +46,7 @@ public class GameLoop implements Runnable {
             lastTimeNS = currentTimeNS;
             deltaRender += elapsedTimeNS / timePerFrameNS;
             deltaUpdate += elapsedTimeNS / timePerUpdateNS;
+            timePlayedNS += elapsedTimeNS;
 
             while (deltaUpdate >= 1.0) {
                 game.update(deltaTimeS);
