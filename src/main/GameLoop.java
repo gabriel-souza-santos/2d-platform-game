@@ -3,8 +3,9 @@ package main;
 import engine.Updatable;
 
 public class GameLoop implements Runnable {
-    private static final long TARGET_FPS = 120;
-    private static final long TARGET_UPS = 120;
+    public static final long TARGET_FPS = 120;
+    public static final long TARGET_UPS = 120;
+
     private volatile boolean keepRunning = false;
 
     private final Updatable game;
