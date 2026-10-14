@@ -6,6 +6,7 @@ import input.MouseInput;
 
 import javax.swing.JPanel;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 public class GamePanel {
     private final JPanel panel;
@@ -15,7 +16,16 @@ public class GamePanel {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                game.render(g);
+
+                // Safety: Since Java 1.2, Swing passes a Graphics2D to paintComponent
+                Graphics2D g2d = (Graphics2D) g.create();
+                // TODO: Add rendering hints
+
+                try {
+                    game.render(g2d);
+                } finally {
+                    g2d.dispose();
+                }
             }
         };
 

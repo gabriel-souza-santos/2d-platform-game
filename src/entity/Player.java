@@ -9,6 +9,7 @@ import world.Coordinate;
 
 import javax.imageio.ImageIO;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,8 +50,8 @@ public class Player implements Renderable, Updatable {
     }
 
     @Override
-    public void render(Graphics g) {
-        renderSprite(g);
+    public void render(Graphics2D g2d) {
+        renderSprite(g2d);
     }
 
     @Override
@@ -63,9 +64,9 @@ public class Player implements Renderable, Updatable {
 
     // FIXME: Mixed coordinates systems
     // TODO: Separate and map player and render coordinates
-    private void renderSprite(Graphics g) {
+    private void renderSprite(Graphics g2d) {
         BufferedImage sprite = getSprite(currentAnimation, currentSpriteIndex);
-        g.drawImage(sprite, (int)position.x, (int)position.y, null);
+        g2d.drawImage(sprite, (int)position.x, (int)position.y, null);
     }
 
     private void updateOrientation() {

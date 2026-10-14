@@ -6,7 +6,7 @@ import entity.Player;
 import input.KeyboardInput;
 import input.MouseInput;
 
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 public class Game implements Runnable, Renderable, Updatable {
     public static long TARGET_FPS = 120;
@@ -58,9 +58,9 @@ public class Game implements Runnable, Renderable, Updatable {
     }
 
     @Override
-    public void render(Graphics g) {
+    public void render(Graphics2D g2d) {
         // TODO: Show FPS and UPS on the screen
-        player.render(g);
+        player.render(g2d);
     }
 
     @Override
