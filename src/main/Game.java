@@ -5,6 +5,7 @@ import engine.Updatable;
 import entity.Player;
 import input.KeyboardInput;
 import input.MouseInput;
+import ui.DebugOverlay;
 
 import java.awt.Graphics2D;
 
@@ -19,6 +20,8 @@ public class Game implements Renderable, Updatable {
     private MouseInput mouse;
 
     private Player player;
+
+    private DebugOverlay debugScreen;
 
     // FIXME: Starting a thread inside the constructor could create a race condition with object initialization.
     public Game() {
@@ -36,6 +39,8 @@ public class Game implements Renderable, Updatable {
         window = new GameWindow(panel);
 
         runner = new GameLoop(this::update, panel);
+
+        debugScreen = new DebugOverlay(runner);
     }
 
     private void startGameLoop() {
@@ -57,7 +62,7 @@ public class Game implements Renderable, Updatable {
 
     @Override
     public void render(Graphics2D g2d) {
-        // TODO: Show FPS and UPS on the screen
         player.render(g2d);
+        debugScreen.render(g2d);
     }
 }
