@@ -33,15 +33,13 @@ public class GamePanel {
         panel.addMouseListener(mouse);
         panel.addMouseMotionListener(mouse);
         panel.addMouseWheelListener(mouse);
+
         panel.setFocusable(true);
+        panel.requestFocusInWindow(); // Gets the input focus
     }
 
     public void repaint() {
         panel.repaint();
-    }
-
-    public void requestFocus() {
-        panel.requestFocusInWindow();
     }
 
     public JPanel asComponent() {
