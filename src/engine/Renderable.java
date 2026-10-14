@@ -1,8 +1,7 @@
 package engine;
 
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 public interface Renderable {
-    // TODO: Update to Graphics2D
-    void render(Graphics g);
+    void render(Graphics2D g2d);
 }
