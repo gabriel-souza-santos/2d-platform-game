@@ -10,7 +10,7 @@ import java.awt.Graphics2D;
 
 public class Game implements Renderable, Updatable {
     private Thread loopThread;
-    private GameLoop gameLoop;
+    private GameLoop runner;
 
     private GameWindow window;
     private GamePanel panel;
@@ -35,13 +35,13 @@ public class Game implements Renderable, Updatable {
         panel = new GamePanel(this::render, keyboard, mouse);
         window = new GameWindow(panel);
 
-        gameLoop = new GameLoop(this::update, panel);
+        runner = new GameLoop(this::update, panel);
     }
 
     private void startGameLoop() {
-        loopThread = new Thread(gameLoop::run);
+        loopThread = new Thread(runner::run);
         loopThread.start();
-        gameLoop.start();
+        runner.start();
     }
 
     private void stopGameLoop() {
