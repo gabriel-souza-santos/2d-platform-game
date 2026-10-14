@@ -33,6 +33,7 @@ public class GamePanel {
         panel.addMouseListener(mouse);
         panel.addMouseMotionListener(mouse);
         panel.addMouseWheelListener(mouse);
+        panel.setFocusable(true);
     }
 
     public void repaint() {
