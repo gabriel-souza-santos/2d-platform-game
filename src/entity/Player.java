@@ -2,7 +2,7 @@ package entity;
 
 import engine.Renderable;
 import engine.Updatable;
-import input.KeyAction;
+import input.KeyType;
 import input.KeyboardInput;
 import input.MouseInput;
 import world.Coordinate;
@@ -72,13 +72,13 @@ public class Player implements Renderable, Updatable {
     private void updateOrientation() {
         isMoving = true;
 
-        if (keyboard.isHeld(KeyAction.UP)) {
+        if (keyboard.isHeld(KeyType.W)) {
             currentOrientation = OrientationType.UP;
-        } else if (keyboard.isHeld(KeyAction.DOWN)) {
+        } else if (keyboard.isHeld(KeyType.S)) {
             currentOrientation = OrientationType.DOWN;
-        } else if (keyboard.isHeld(KeyAction.LEFT)) {
+        } else if (keyboard.isHeld(KeyType.A)) {
             currentOrientation = OrientationType.LEFT;
-        } else if (keyboard.isHeld(KeyAction.RIGHT)) {
+        } else if (keyboard.isHeld(KeyType.D)) {
             currentOrientation = OrientationType.RIGHT;
         } else {
             currentOrientation = OrientationType.NONE;

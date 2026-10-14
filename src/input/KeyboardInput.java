@@ -8,19 +8,19 @@ import java.util.Set;
 
 // FIXME: Ensure consistent keyboard reads on threaded environment
 public class KeyboardInput implements KeyListener {
-    private final Set<KeyAction> heldKeys;
-    private final Set<KeyAction> pressedKeys;
+    private final Set<KeyType> heldKeys;
+    private final Set<KeyType> pressedKeys;
 
     public KeyboardInput() {
-        heldKeys = EnumSet.noneOf(KeyAction.class);
-        pressedKeys = EnumSet.noneOf(KeyAction.class);
+        heldKeys = EnumSet.noneOf(KeyType.class);
+        pressedKeys = EnumSet.noneOf(KeyType.class);
     }
 
-    public boolean isHeld(KeyAction key) {
+    public boolean isHeld(KeyType key) {
         return heldKeys.contains(key);
     }
 
-    public boolean isPressed(KeyAction key) {
+    public boolean isPressed(KeyType key) {
         return pressedKeys.contains(key);
     }
 
@@ -36,12 +36,12 @@ public class KeyboardInput implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        Optional<KeyAction> mapped = KeyAction.fromKeyCode(e.getKeyCode());
+        Optional<KeyType> mapped = KeyType.fromCode(e.getKeyCode());
         if (mapped.isEmpty()) {
             return;
         }
 
-        KeyAction key = mapped.get();
+        KeyType key = mapped.get();
         if (heldKeys.contains(key)) {
             return; // Not a new press
         }
@@ -52,7 +52,7 @@ public class KeyboardInput implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        Optional<KeyAction> key = KeyAction.fromKeyCode(e.getKeyCode());
+        Optional<KeyType> key = KeyType.fromCode(e.getKeyCode());
         key.ifPresent(heldKeys::remove);
     }
 }
