@@ -34,7 +34,6 @@ public class Game implements Renderable, Updatable {
 
         panel = new GamePanel(this::render, keyboard, mouse);
         window = new GameWindow(panel);
-        panel.requestFocus(); // Gets the input focus
 
         gameLoop = new GameLoop(this::update, panel);
     }
