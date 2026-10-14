@@ -40,7 +40,7 @@ public class Game implements Renderable, Updatable {
 
         runner = new GameLoop(this::update, panel);
 
-        debugScreen = new DebugOverlay(runner);
+        debugScreen = new DebugOverlay(runner, keyboard);
     }
 
     private void startGameLoop() {
@@ -56,6 +56,7 @@ public class Game implements Renderable, Updatable {
     @Override
     public void update(double deltaTimeS) {
         player.update(deltaTimeS);
+        debugScreen.update(deltaTimeS);
         keyboard.endFrame();
         mouse.endFrame();
     }

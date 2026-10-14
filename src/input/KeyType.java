@@ -14,6 +14,8 @@ public enum KeyType {
     DOWN(KeyEvent.VK_DOWN),
     RIGHT(KeyEvent.VK_RIGHT),
 
+    F3(KeyEvent.VK_F3),
+
     SPACE(KeyEvent.VK_SPACE),
     ENTER(KeyEvent.VK_ENTER);
 
