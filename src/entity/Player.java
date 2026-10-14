@@ -5,6 +5,7 @@ import engine.Updatable;
 import input.KeyType;
 import input.KeyboardInput;
 import input.MouseInput;
+import main.GameLoop;
 import world.Coordinate;
 
 import javax.imageio.ImageIO;
@@ -17,6 +18,7 @@ import java.util.Optional;
 
 public class Player implements Renderable, Updatable {
     private static final String SPRITESHEET_PATH = "/images/player/soldier-sword-shield.png";
+    private static final double SPRITE_SCALE = 3;
 
     private final KeyboardInput keyboard;
     private final MouseInput mouse;
@@ -27,6 +29,8 @@ public class Player implements Renderable, Updatable {
 
     private boolean isMoving;
     private int currentSpriteIndex;
+    private int animationSpeed;
+    private int currentTick;
     private AnimationType currentAnimation;
     private OrientationType currentOrientation;
     private final BufferedImage[] sprites;
@@ -38,9 +42,11 @@ public class Player implements Renderable, Updatable {
         position = Coordinate.from(Coordinate.SPAWN);
 
         isMoving = false;
+        animationSpeed = (int) GameLoop.TARGET_FPS / 4;
         currentAnimation = AnimationType.IDLE;
         currentOrientation = OrientationType.NONE;
         currentSpriteIndex = 0;
+        currentTick = 0;
 
         sprites = loadSpritesFrom(SPRITESHEET_PATH).orElseGet(() -> {
             System.err.println("Error: Couldn't correctly load sprites of file " + SPRITESHEET_PATH);
@@ -66,7 +72,14 @@ public class Player implements Renderable, Updatable {
     // TODO: Separate and map player and render coordinates
     private void renderSprite(Graphics g2d) {
         BufferedImage sprite = getSprite(currentAnimation, currentSpriteIndex);
-        g2d.drawImage(sprite, (int)position.x, (int)position.y, null);
+
+        int atX = (int) position.x;
+        int atY = (int) position.y;
+
+        int width = sprite.getWidth() * (int) SPRITE_SCALE;
+        int height = sprite.getHeight() * (int) SPRITE_SCALE;
+
+        g2d.drawImage(sprite, atX, atY, width, height, null);
     }
 
     private void updateOrientation() {
@@ -116,7 +129,13 @@ public class Player implements Renderable, Updatable {
     }
 
     private void updateSprite() {
-        currentSpriteIndex++;
+        currentTick++;
+
+        if (currentTick >= animationSpeed) {
+            currentTick = 0;
+            currentSpriteIndex++;
+        }
+
         if (currentSpriteIndex >= AnimationType.getSpriteAmount(currentAnimation)) {
             currentSpriteIndex = 0;
         }
