@@ -44,7 +44,7 @@ public class Game implements Renderable, Updatable {
     }
 
     private void startGameLoop() {
-        loopThread = new Thread(runner::run);
+        loopThread = new Thread(runner::run, "game-loop");
         loopThread.start();
         runner.start();
     }
