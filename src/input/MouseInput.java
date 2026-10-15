@@ -10,7 +10,7 @@ import java.awt.event.MouseWheelListener;
 //   - The EDT (Event Dispatch Thread) writes via mouse event callbacks.
 //   - The game-loop thread reads via public query methods and clears via endFrame().
 //   Use synchronized blocks, volatile fields, or snapshot-swapping to ensure thread-safe reads/writes.
-public class MouseInput implements MouseListener, MouseMotionListener, MouseWheelListener {
+public final class MouseInput implements MouseListener, MouseMotionListener, MouseWheelListener {
     public void endFrame() {
         // TODO
     }

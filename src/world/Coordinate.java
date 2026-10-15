@@ -1,6 +1,6 @@
 package world;
 
-public class Coordinate {
+public final class Coordinate {
     public static final Coordinate SPAWN = new Coordinate(0, 0);
     public long x, y;
 

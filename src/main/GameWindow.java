@@ -2,7 +2,7 @@ package main;
 
 import javax.swing.JFrame;
 
-public class GameWindow {
+public final class GameWindow {
     public static final int DEFAULT_WIDTH = 800;
     public static final int DEFAULT_HEIGHT = 600;
 
