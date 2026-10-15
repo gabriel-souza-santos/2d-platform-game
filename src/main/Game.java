@@ -48,13 +48,9 @@ public final class Game implements Renderable, Updatable {
     }
 
     private void startGameLoop() {
-        // FIXME: Start order is inverted — runner.start() sets keepRunning = true, but it's called
-        //   AFTER loopThread.start(). The game-loop thread may enter run(), see keepRunning == false,
-        //   and exit the while-loop immediately before runner.start() executes.
-        //   Call runner.start() before loopThread.start() to ensure the loop flag is set first.
         loopThread = new Thread(runner::run, "game-loop");
-        loopThread.start();
         runner.start();
+        loopThread.start();
     }
 
     private void stopGameLoop() {
