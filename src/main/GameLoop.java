@@ -84,7 +84,9 @@ public class GameLoop implements Runnable {
                 statsTimerNS += 1_000_000_000L;
             }
 
-            // TODO: calculate remaining frame time and sleep to reduce CPU usage without dropping target FPS/UPS.
+            // FIXME: Busy-wait spin loop — this pegs one CPU core at 100% usage.
+            //   Calculate the remaining time until the next frame/update is due and sleep
+            //   using Thread.sleep() or LockSupport.parkNanos() to yield the CPU.
         }
     }
 }

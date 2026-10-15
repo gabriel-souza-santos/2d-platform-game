@@ -6,7 +6,10 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
-// FIXME: Ensure consistent mouse reads on threaded environment
+// FIXME: Any mutable state added here will be accessed concurrently by two threads without synchronization:
+//   - The EDT (Event Dispatch Thread) writes via mouse event callbacks.
+//   - The game-loop thread reads via public query methods and clears via endFrame().
+//   Use synchronized blocks, volatile fields, or snapshot-swapping to ensure thread-safe reads/writes.
 public class MouseInput implements MouseListener, MouseMotionListener, MouseWheelListener {
     public void endFrame() {
         // TODO

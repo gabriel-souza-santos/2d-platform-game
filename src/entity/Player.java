@@ -16,6 +16,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
 
+// FIXME: render() runs on the EDT (via paintComponent) while update() runs on the game-loop thread.
+//   Both access shared mutable fields (position, currentAnimation, currentSpriteIndex, isMoving)
+//   with no synchronization. This can cause visual tearing, inconsistent sprite/position combos,
+//   or ArrayIndexOutOfBoundsException if currentSpriteIndex is read between increment and bounds reset.
+//   Consider double-buffering game state, synchronizing on a lock, or copying a snapshot for rendering.
 public class Player implements Renderable, Updatable {
     private static final String SPRITESHEET_PATH = "/images/player/soldier-sword-shield.png";
     private static final double SPRITE_SCALE = 3;
@@ -68,8 +73,8 @@ public class Player implements Renderable, Updatable {
         updateSprite();
     }
 
-    // FIXME: Mixed coordinates systems
-    // TODO: Separate and map player and render coordinates
+    // FIXME: Player coordinates (world-space) are currently mixed with render coordinates (screen-space).
+    // TODO: Decouple spatial logic by introducing a explicit mapping/conversion layer (e.g., worldToScreen).
     private void renderSprite(Graphics g2d) {
         BufferedImage sprite = getSprite(currentAnimation, currentSpriteIndex);
 

@@ -23,7 +23,11 @@ public class Game implements Renderable, Updatable {
 
     private DebugOverlay debugScreen;
 
-    // FIXME: Starting a thread inside the constructor could create a race condition with object initialization.
+    // FIXME: Starting a thread inside the constructor is a race condition with object initialization.
+    //   The JMM only guarantees safe publication of 'final' fields after the constructor returns.
+    //   Since player, keyboard, mouse, debugScreen, and panel are NOT final, the game-loop thread
+    //   may see them as null or in a partially constructed state, causing NullPointerExceptions.
+    //   Move thread startup to a separate start() method called after construction.
     public Game() {
         initComponents();
         startGameLoop();
@@ -44,13 +48,21 @@ public class Game implements Renderable, Updatable {
     }
 
     private void startGameLoop() {
+        // FIXME: Start order is inverted — runner.start() sets keepRunning = true, but it's called
+        //   AFTER loopThread.start(). The game-loop thread may enter run(), see keepRunning == false,
+        //   and exit the while-loop immediately before runner.start() executes.
+        //   Call runner.start() before loopThread.start() to ensure the loop flag is set first.
         loopThread = new Thread(runner::run, "game-loop");
         loopThread.start();
         runner.start();
     }
 
     private void stopGameLoop() {
-        // FIXME: Add thread cleanup and gameThread.join() on loop termination to avoid dangling background threads.
+        // FIXME: No thread cleanup — the game-loop thread is never stopped or joined.
+        //   The game-loop is a non-daemon thread, so it keeps the JVM alive even after the window closes
+        //   (unless System.exit() is called by EXIT_ON_CLOSE). This prevents graceful shutdown, state
+        //   saving, or resource flushing. Call runner.stop() to signal the loop, then loopThread.join()
+        //   to wait for it to finish. Consider also adding a JFrame WindowListener or shutdown hook.
     }
 
     @Override
