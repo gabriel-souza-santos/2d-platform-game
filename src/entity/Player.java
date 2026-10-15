@@ -21,7 +21,7 @@ import java.util.Optional;
 //   with no synchronization. This can cause visual tearing, inconsistent sprite/position combos,
 //   or ArrayIndexOutOfBoundsException if currentSpriteIndex is read between increment and bounds reset.
 //   Consider double-buffering game state, synchronizing on a lock, or copying a snapshot for rendering.
-public class Player implements Renderable, Updatable {
+public final class Player implements Renderable, Updatable {
     private static final String SPRITESHEET_PATH = "/images/player/soldier-sword-shield.png";
     private static final double SPRITE_SCALE = 3;
 

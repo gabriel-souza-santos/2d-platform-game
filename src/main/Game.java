@@ -9,7 +9,7 @@ import ui.DebugOverlay;
 
 import java.awt.Graphics2D;
 
-public class Game implements Renderable, Updatable {
+public final class Game implements Renderable, Updatable {
     private Thread loopThread;
     private GameLoop runner;
 

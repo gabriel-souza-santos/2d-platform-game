@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
-public class GamePanel {
+public final class GamePanel {
     private final JPanel panel;
 
     public GamePanel(Renderable game, KeyboardInput keyboard, MouseInput mouse) {

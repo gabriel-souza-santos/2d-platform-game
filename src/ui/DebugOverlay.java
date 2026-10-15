@@ -9,7 +9,7 @@ import main.GameLoop;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-public class DebugOverlay implements Renderable, Updatable {
+public final class DebugOverlay implements Renderable, Updatable {
     private volatile boolean isActive = false;
 
     private final KeyboardInput keyboard;

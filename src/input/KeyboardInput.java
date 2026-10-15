@@ -11,7 +11,7 @@ import java.util.Set;
 //   - The game-loop thread reads via isHeld()/isPressed() and clears via endFrame().
 //   EnumSet is not thread-safe. This can cause lost key presses, stuck keys, or stale reads.
 //   Consider using synchronized blocks, ConcurrentHashMap.newKeySet(), or snapshot-swapping per frame.
-public class KeyboardInput implements KeyListener {
+public final class KeyboardInput implements KeyListener {
     private final Set<KeyType> heldKeys;
     private final Set<KeyType> pressedKeys;
 
