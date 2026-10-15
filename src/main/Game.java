@@ -7,6 +7,7 @@ import input.KeyboardInput;
 import input.MouseInput;
 import ui.DebugOverlay;
 
+import javax.swing.SwingUtilities;
 import java.awt.Graphics2D;
 
 public final class Game implements Renderable, Updatable {
@@ -39,8 +40,10 @@ public final class Game implements Renderable, Updatable {
     }
 
     static void launch() {
-        Game game = new Game();
-        game.start();
+        SwingUtilities.invokeLater(() -> {
+            Game game = new Game();
+            game.start();
+        });
     }
 
     @Override
