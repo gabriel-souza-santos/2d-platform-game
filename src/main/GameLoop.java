@@ -34,6 +34,7 @@ public class GameLoop implements Runnable {
     public int getCurrentFPS() {
         return currentFPS;
     }
+
     public int getCurrentUPS() {
         return currentUPS;
     }
