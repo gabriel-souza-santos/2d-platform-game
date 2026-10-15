@@ -6,7 +6,11 @@ import java.util.EnumSet;
 import java.util.Optional;
 import java.util.Set;
 
-// FIXME: Ensure consistent keyboard reads on threaded environment
+// FIXME: heldKeys and pressedKeys (EnumSet) are accessed concurrently by two threads without synchronization:
+//   - The EDT (Event Dispatch Thread) writes via keyPressed()/keyReleased().
+//   - The game-loop thread reads via isHeld()/isPressed() and clears via endFrame().
+//   EnumSet is not thread-safe. This can cause lost key presses, stuck keys, or stale reads.
+//   Consider using synchronized blocks, ConcurrentHashMap.newKeySet(), or snapshot-swapping per frame.
 public class KeyboardInput implements KeyListener {
     private final Set<KeyType> heldKeys;
     private final Set<KeyType> pressedKeys;
