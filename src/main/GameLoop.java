@@ -100,15 +100,15 @@ public final class GameLoop implements Runnable {
         }
     }
 
-
     private void waitUntil(long deadlineNS) {
-        long remainingNS;
+        long remainingNS = deadlineNS - System.nanoTime();
 
-        while ((remainingNS = deadlineNS - System.nanoTime()) > SPIN_THRESHOLD_NS) {
+        while (remainingNS > SPIN_THRESHOLD_NS) {
             if (!keepRunning) {
                 return;
             }
             LockSupport.parkNanos(remainingNS - SPIN_THRESHOLD_NS);
+            remainingNS = deadlineNS - System.nanoTime();
         }
 
         while (deadlineNS - System.nanoTime() > 0) {
