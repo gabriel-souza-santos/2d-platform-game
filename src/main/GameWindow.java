@@ -1,7 +1,6 @@
 package main;
 
 import javax.swing.JFrame;
-import java.awt.Dimension;
 
 public class GameWindow {
     public static final int DEFAULT_WIDTH = 800;
