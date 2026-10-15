@@ -2,9 +2,15 @@ package main;
 
 import engine.Updatable;
 
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.LockSupport;
+
 public final class GameLoop implements Runnable {
     public static final long TARGET_FPS = 120;
     public static final long TARGET_UPS = 120;
+
+    private static final long NANOS_PER_SECOND = TimeUnit.SECONDS.toNanos(1);
+    private static final long SPIN_THRESHOLD_NS = TimeUnit.MILLISECONDS.toNanos(2);
 
     private volatile boolean keepRunning = false;
     private volatile long timePlayedNS = 0;
@@ -41,8 +47,8 @@ public final class GameLoop implements Runnable {
 
     @Override
     public void run() {
-        double timePerFrameNS = 1_000_000_000.0 / TARGET_FPS;
-        double timePerUpdateNS = 1_000_000_000.0 / TARGET_UPS;
+        long timePerFrameNS = NANOS_PER_SECOND / TARGET_FPS;
+        long timePerUpdateNS = NANOS_PER_SECOND / TARGET_UPS;
         double deltaTimeS = 1.0 / TARGET_UPS;
 
         long lastTimeNS = System.nanoTime();
@@ -53,40 +59,63 @@ public final class GameLoop implements Runnable {
         int frames = 0;
         int updates = 0;
 
+        long nextUpdateNS = lastTimeNS + (long) timePerUpdateNS;
+        long nextFrameNS = lastTimeNS + (long) timePerFrameNS;
+
         while (keepRunning) {
             long currentTimeNS = System.nanoTime();
             long elapsedTimeNS = currentTimeNS - lastTimeNS;
 
             lastTimeNS = currentTimeNS;
-            deltaRender += elapsedTimeNS / timePerFrameNS;
-            deltaUpdate += elapsedTimeNS / timePerUpdateNS;
+            deltaRender += (double) elapsedTimeNS / timePerFrameNS;
+            deltaUpdate += (double) elapsedTimeNS / timePerUpdateNS;
             timePlayedNS += elapsedTimeNS;
 
             while (deltaUpdate >= 1.0) {
                 game.update(deltaTimeS);
+                nextUpdateNS += timePerUpdateNS;
                 deltaUpdate--;
                 updates++;
             }
 
             if (deltaRender >= 1.0) {
                 panel.repaint();
+                nextFrameNS += timePerFrameNS;
                 deltaRender--;
                 frames++;
             }
 
-            if (currentTimeNS - statsTimerNS >= 1_000_000_000L) {
+            if (currentTimeNS - statsTimerNS >= NANOS_PER_SECOND) {
                 currentFPS = frames;
                 currentUPS = updates;
 
                 frames = 0;
                 updates = 0;
 
-                statsTimerNS += 1_000_000_000L;
+                statsTimerNS += NANOS_PER_SECOND;
             }
 
-            // FIXME: Busy-wait spin loop — this pegs one CPU core at 100% usage.
-            //   Calculate the remaining time until the next frame/update is due and sleep
-            //   using Thread.sleep() or LockSupport.parkNanos() to yield the CPU.
+            long deadlineNS = Math.min(nextUpdateNS, nextFrameNS);
+            waitUntil(deadlineNS);
+        }
+    }
+
+
+    private void waitUntil(long deadlineNS) {
+        long remainingNS;
+
+        while ((remainingNS = deadlineNS - System.nanoTime()) > SPIN_THRESHOLD_NS) {
+            if (!keepRunning) {
+                return;
+            }
+            LockSupport.parkNanos(remainingNS - SPIN_THRESHOLD_NS);
+        }
+
+        while (deadlineNS - System.nanoTime() > 0) {
+            if (!keepRunning) {
+                return;
+            }
+            Thread.onSpinWait();
         }
     }
 }
