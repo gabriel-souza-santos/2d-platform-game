@@ -10,10 +10,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 public class DebugOverlay implements Renderable, Updatable {
-    // FIXME: isActive is written by update() on the game-loop thread and read by render() on the EDT,
-    //   but it is not declared volatile. Without a memory barrier, the EDT may cache the stale value
-    //   indefinitely and never show (or hide) the debug overlay. Mark this field as volatile.
-    private boolean isActive = false;
+    private volatile boolean isActive = false;
 
     private final KeyboardInput keyboard;
     private final GameLoop runner;
