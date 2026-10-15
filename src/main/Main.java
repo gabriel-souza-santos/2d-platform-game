@@ -6,6 +6,6 @@ public final class Main {
     //   This can cause deadlocks during component realization, rendering artifacts, or sporadic crashes.
     //   Wrap in SwingUtilities.invokeLater(() -> new Game()) to ensure EDT construction.
     public static void main(String[] args) {
-        new Game();
+        Game.launch();
     }
 }

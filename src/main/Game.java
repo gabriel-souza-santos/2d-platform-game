@@ -10,30 +10,20 @@ import ui.DebugOverlay;
 import java.awt.Graphics2D;
 
 public final class Game implements Renderable, Updatable {
-    private Thread loopThread;
-    private GameLoop runner;
+    private final Thread loopThread;
+    private final GameLoop runner;
 
-    private GameWindow window;
-    private GamePanel panel;
+    private final GameWindow window;
+    private final GamePanel panel;
 
-    private KeyboardInput keyboard;
-    private MouseInput mouse;
+    private final KeyboardInput keyboard;
+    private final MouseInput mouse;
 
-    private Player player;
+    private final Player player;
 
-    private DebugOverlay debugScreen;
+    private final DebugOverlay debugScreen;
 
-    // FIXME: Starting a thread inside the constructor is a race condition with object initialization.
-    //   The JMM only guarantees safe publication of 'final' fields after the constructor returns.
-    //   Since player, keyboard, mouse, debugScreen, and panel are NOT final, the game-loop thread
-    //   may see them as null or in a partially constructed state, causing NullPointerExceptions.
-    //   Move thread startup to a separate start() method called after construction.
-    public Game() {
-        initComponents();
-        startGameLoop();
-    }
-
-    private void initComponents() {
+    private Game() {
         keyboard = new KeyboardInput();
         mouse = new MouseInput();
 
@@ -43,22 +33,14 @@ public final class Game implements Renderable, Updatable {
         window = new GameWindow(panel);
 
         runner = new GameLoop(this::update, panel);
+        loopThread = new Thread(runner::run, "game-loop");
 
         debugScreen = new DebugOverlay(runner, keyboard);
     }
 
-    private void startGameLoop() {
-        loopThread = new Thread(runner::run, "game-loop");
-        runner.start();
-        loopThread.start();
-    }
-
-    private void stopGameLoop() {
-        // FIXME: No thread cleanup — the game-loop thread is never stopped or joined.
-        //   The game-loop is a non-daemon thread, so it keeps the JVM alive even after the window closes
-        //   (unless System.exit() is called by EXIT_ON_CLOSE). This prevents graceful shutdown, state
-        //   saving, or resource flushing. Call runner.stop() to signal the loop, then loopThread.join()
-        //   to wait for it to finish. Consider also adding a JFrame WindowListener or shutdown hook.
+    static void launch() {
+        Game game = new Game();
+        game.start();
     }
 
     @Override
@@ -73,5 +55,18 @@ public final class Game implements Renderable, Updatable {
     public void render(Graphics2D g2d) {
         player.render(g2d);
         debugScreen.render(g2d);
+    }
+
+    private void start() {
+        runner.start();
+        loopThread.start();
+    }
+
+    private void stop() {
+        // FIXME: No thread cleanup — the game-loop thread is never stopped or joined.
+        //   The game-loop is a non-daemon thread, so it keeps the JVM alive even after the window closes
+        //   (unless System.exit() is called by EXIT_ON_CLOSE). This prevents graceful shutdown, state
+        //   saving, or resource flushing. Call runner.stop() to signal the loop, then loopThread.join()
+        //   to wait for it to finish. Consider also adding a JFrame WindowListener or shutdown hook.
     }
 }
