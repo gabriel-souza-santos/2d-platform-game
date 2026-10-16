@@ -43,7 +43,7 @@ public final class Player implements Renderable, Updatable {
         position = Coordinate.from(Coordinate.SPAWN);
 
         isMoving = false;
-        animationSpeed = (int) GameLoop.TARGET_FPS / 4;
+        animationSpeed = (int) GameLoop.TARGET_FPS / 8;
         currentAnimation = PlayerAnimationType.IDLE;
         currentOrientation = OrientationType.NONE;
 
