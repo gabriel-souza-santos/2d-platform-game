@@ -9,6 +9,9 @@ public final class Animation {
     private final BufferedImage[] frames;
     private final int ticksPerFrame;
 
+    private boolean isLooping = false;
+    private boolean isFinished = false;
+
     private int currentFrame;
     private int currentTick;
 
@@ -47,19 +50,40 @@ public final class Animation {
     }
 
     public void update() {
+        if (isFinished) {
+            return;
+        }
+
         currentTick++;
-        if (currentTick >= ticksPerFrame) {
-            currentTick = 0;
-            currentFrame = (currentFrame + 1) % frames.length;
+        if (currentTick < ticksPerFrame) {
+            return;
+        }
+
+        currentTick = 0;
+        if (currentFrame + 1 < frames.length) {
+            currentFrame++;
+        } else if (isLooping) {
+            currentFrame = 0;
+        } else {
+            isFinished = true;
         }
     }
 
     public void reset() {
         currentFrame = 0;
         currentTick = 0;
+        isFinished = false;
+    }
+
+    public boolean isFinished() {
+        return isFinished;
     }
 
     public BufferedImage getCurrentFrame() {
         return frames[currentFrame];
+    }
+
+    public void setLooping(boolean isLooping) {
+        this.isLooping = isLooping;
     }
 }

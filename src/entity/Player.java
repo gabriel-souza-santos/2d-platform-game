@@ -27,8 +27,9 @@ public final class Player implements Renderable, Updatable {
     private final MouseInput mouse;
 
     private final Coordinate position;
+    private boolean isAttacking;
     private boolean isMoving;
-    private  boolean isFacingLeft;
+    private boolean isFacingLeft;
     private long deltaX = 1;
     private long deltaY = 1;
 
@@ -43,6 +44,7 @@ public final class Player implements Renderable, Updatable {
 
         position = Coordinate.from(Coordinate.SPAWN);
 
+        isAttacking = false;
         isMoving = false;
         isFacingLeft = false;
         animationSpeed = (int) GameLoop.TARGET_FPS / 8;
@@ -62,6 +64,7 @@ public final class Player implements Renderable, Updatable {
     public void update(double deltaTimeS) {
         updateOrientation();
         updatePosition();
+        updateAttack();
         updateAnimation();
     }
 
@@ -87,6 +90,7 @@ public final class Player implements Renderable, Updatable {
     private void updateOrientation() {
         isMoving = true;
 
+        // TODO: Add arrow keys
         if (keyboard.isHeld(KeyType.W)) {
             currentOrientation = OrientationType.UP;
         } else if (keyboard.isHeld(KeyType.S)) {
@@ -124,11 +128,33 @@ public final class Player implements Renderable, Updatable {
         }
     }
 
-    private void updateAnimation() {
-        PlayerAnimationType next = isMoving ? PlayerAnimationType.WALK : PlayerAnimationType.IDLE;
+    private void updateAttack() {
+        Animation attackAnimation = animations.get(PlayerAnimationType.FIRST_ATTACK);
 
-        if (next != currentAnimation) {
-            currentAnimation = next;
+        // TODO: Switch to mouse click
+        if (!isAttacking && keyboard.isPressed(KeyType.SPACE)) {
+            isAttacking = true;
+            attackAnimation.reset();
+        }
+
+        if (isAttacking && attackAnimation.isFinished()) {
+            isAttacking = false;
+        }
+    }
+
+    private void updateAnimation() {
+        PlayerAnimationType nextAnimation;
+
+        if (isMoving) {
+            nextAnimation = PlayerAnimationType.WALK;
+        } else if (isAttacking) {
+            nextAnimation = PlayerAnimationType.FIRST_ATTACK;
+        } else {
+            nextAnimation = PlayerAnimationType.IDLE;
+        }
+
+        if (nextAnimation != currentAnimation) {
+            currentAnimation = nextAnimation;
             animations.get(currentAnimation).reset();
         }
 
@@ -148,5 +174,8 @@ public final class Player implements Renderable, Updatable {
                 throw new IllegalStateException("Couldn't load animation " + type + " from " + filePath);
             }
         }
+
+        animations.get(PlayerAnimationType.IDLE).setLooping(true);
+        animations.get(PlayerAnimationType.WALK).setLooping(true);
     }
 }

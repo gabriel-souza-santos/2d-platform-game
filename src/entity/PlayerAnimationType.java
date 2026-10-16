@@ -8,7 +8,7 @@ public enum PlayerAnimationType {
     FIRST_ATTACK("/images/player/first-attack.png", 8),
     SECOND_ATTACK("/images/player/second-attack.png", 8),
     HURT("/images/player/hurt.png", 4),
-    DEATH("/images/player/death.png", 10),;
+    DEATH("/images/player/death.png", 10);
 
     private final String filePath;
     private final int frameCount;
