@@ -1,6 +1,4 @@
-package main;
-
-import engine.Updatable;
+package engine;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;
@@ -18,9 +16,9 @@ public final class GameLoop implements Runnable {
     private volatile int currentUps = 0;
 
     private final Updatable game;
-    private final GamePanel panel;
+    private final Repaintable panel;
 
-    public GameLoop(Updatable game, GamePanel panel) {
+    public GameLoop(Updatable game, Repaintable panel) {
         this.game = game;
         this.panel = panel;
     }

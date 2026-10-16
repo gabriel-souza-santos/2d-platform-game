@@ -1,11 +1,11 @@
 package entity;
 
+import engine.GameLoop;
 import engine.Renderable;
 import engine.Updatable;
 import input.KeyType;
 import input.KeyboardInput;
 import input.MouseInput;
-import main.GameLoop;
 import world.Coordinate;
 
 import java.awt.Graphics;
