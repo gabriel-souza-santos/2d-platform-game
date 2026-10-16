@@ -28,6 +28,7 @@ public final class Player implements Renderable, Updatable {
 
     private final Coordinate position;
     private boolean isMoving;
+    private  boolean isFacingLeft;
     private long deltaX = 1;
     private long deltaY = 1;
 
@@ -43,6 +44,7 @@ public final class Player implements Renderable, Updatable {
         position = Coordinate.from(Coordinate.SPAWN);
 
         isMoving = false;
+        isFacingLeft = false;
         animationSpeed = (int) GameLoop.TARGET_FPS / 8;
         currentAnimation = PlayerAnimationType.IDLE;
         currentOrientation = OrientationType.NONE;
@@ -74,6 +76,11 @@ public final class Player implements Renderable, Updatable {
         int width = frame.getWidth() * (int) SPRITE_SCALE;
         int height = frame.getHeight() * (int) SPRITE_SCALE;
 
+        if (isFacingLeft) {
+            atX += width;
+            width = -width;
+        }
+
         g2d.drawImage(frame, atX, atY, width, height, null);
     }
 
@@ -86,8 +93,10 @@ public final class Player implements Renderable, Updatable {
             currentOrientation = OrientationType.DOWN;
         } else if (keyboard.isHeld(KeyType.A)) {
             currentOrientation = OrientationType.LEFT;
+            isFacingLeft = true;
         } else if (keyboard.isHeld(KeyType.D)) {
             currentOrientation = OrientationType.RIGHT;
+            isFacingLeft = false;
         } else {
             currentOrientation = OrientationType.NONE;
             isMoving = false;
