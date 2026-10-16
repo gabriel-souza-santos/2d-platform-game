@@ -1,6 +1,7 @@
-package main;
+package ui;
 
 import engine.Renderable;
+import engine.Repaintable;
 import input.KeyboardInput;
 import input.MouseInput;
 
@@ -8,7 +9,7 @@ import javax.swing.JPanel;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
-public final class GamePanel {
+public final class GamePanel implements Repaintable {
     private final JPanel panel;
 
     public GamePanel(Renderable game, KeyboardInput keyboard, MouseInput mouse) {
@@ -23,6 +24,7 @@ public final class GamePanel {
         panel.requestFocusInWindow(); // Gets the input focus
     }
 
+    @Override
     public void repaint() {
         panel.repaint();
     }

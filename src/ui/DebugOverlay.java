@@ -1,10 +1,10 @@
 package ui;
 
+import engine.GameLoop;
 import engine.Renderable;
 import engine.Updatable;
 import input.KeyType;
 import input.KeyboardInput;
-import main.GameLoop;
 
 import java.awt.Color;
 import java.awt.Graphics2D;

@@ -1,11 +1,14 @@
 package main;
 
+import engine.GameLoop;
 import engine.Renderable;
 import engine.Updatable;
 import entity.Player;
 import input.KeyboardInput;
 import input.MouseInput;
 import ui.DebugOverlay;
+import ui.GamePanel;
+import ui.GameWindow;
 
 import javax.swing.SwingUtilities;
 import java.awt.Graphics2D;
@@ -33,7 +36,7 @@ public final class Game implements Renderable, Updatable {
         panel = new GamePanel(this::render, keyboard, mouse);
         window = new GameWindow(panel);
 
-        runner = new GameLoop(this::update, panel);
+        runner = new GameLoop(this::update, panel::repaint);
         loopThread = new Thread(runner::run, "game-loop");
 
         debugScreen = new DebugOverlay(runner, keyboard);
