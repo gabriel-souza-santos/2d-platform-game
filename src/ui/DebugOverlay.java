@@ -19,10 +19,10 @@ public final class DebugOverlay implements Renderable, Updatable {
 
     private volatile boolean isActive = false;
 
-    private String cachedFPS = "FPS: 0";
-    private String cachedUPS = "UPS: 0";
-    private String cachedRAM = "RAM: 0MiB / 0MiB";
-    private String cachedCPU = "CPU: 0.0%";
+    private String cachedFps = "FPS: 0";
+    private String cachedUps = "UPS: 0";
+    private String cachedRam = "RAM: 0MiB / 0MiB";
+    private String cachedCpu = "CPU: 0.0%";
     private String cachedTimePlayed = "Time Played: 0s";
 
     private final OperatingSystemMXBean osBean;
@@ -62,10 +62,10 @@ public final class DebugOverlay implements Renderable, Updatable {
         }
 
         g2d.setColor(Color.BLACK);
-        g2d.drawString(cachedFPS, 10, 12);
-        g2d.drawString(cachedUPS, 10, 24);
-        g2d.drawString(cachedRAM, 10, 36);
-        g2d.drawString(cachedCPU, 10, 48);
+        g2d.drawString(cachedFps, 10, 12);
+        g2d.drawString(cachedUps, 10, 24);
+        g2d.drawString(cachedRam, 10, 36);
+        g2d.drawString(cachedCpu, 10, 48);
         g2d.drawString(cachedTimePlayed, 10, 60);
     }
 
@@ -76,16 +76,16 @@ public final class DebugOverlay implements Renderable, Updatable {
     }
 
     private void updateMetrics() {
-        cachedFPS = "FPS: " + runner.getCurrentFPS();
-        cachedUPS = "UPS: " + runner.getCurrentUPS();
+        cachedFps = "FPS: " + runner.getCurrentFps();
+        cachedUps = "UPS: " + runner.getCurrentUps();
 
         Runtime runtime = Runtime.getRuntime();
-        long usedMB = (runtime.totalMemory() - runtime.freeMemory()) / (1024 * 1024);
-        long maxMB = runtime.maxMemory() / (1024 * 1024);
-        cachedRAM = "RAM: " + usedMB + "MiB / " + maxMB + "MiB";
+        long usedMiB = (runtime.totalMemory() - runtime.freeMemory()) / (1024 * 1024);
+        long maxMiB = runtime.maxMemory() / (1024 * 1024);
+        cachedRam = "RAM: " + usedMiB + "MiB / " + maxMiB + "MiB";
 
         double cpuLoad = osBean.getProcessCpuLoad() * 100.0;
-        cachedCPU = "CPU: " + (cpuLoad < 0 ? "N/A" : String.format("%.1f%%", cpuLoad));
+        cachedCpu = "CPU: " + (cpuLoad < 0 ? "N/A" : String.format("%.1f%%", cpuLoad));
 
         cachedTimePlayed = "Time Played: " + formatTimePlayed(runner.getTimePlayedNS());
     }

@@ -14,8 +14,8 @@ public final class GameLoop implements Runnable {
 
     private volatile boolean keepRunning = false;
     private volatile long timePlayedNS = 0;
-    private volatile int currentFPS = 0;
-    private volatile int currentUPS = 0;
+    private volatile int currentFps = 0;
+    private volatile int currentUps = 0;
 
     private final Updatable game;
     private final GamePanel panel;
@@ -37,12 +37,12 @@ public final class GameLoop implements Runnable {
         return timePlayedNS;
     }
 
-    public int getCurrentFPS() {
-        return currentFPS;
+    public int getCurrentFps() {
+        return currentFps;
     }
 
-    public int getCurrentUPS() {
-        return currentUPS;
+    public int getCurrentUps() {
+        return currentUps;
     }
 
     @Override
@@ -86,8 +86,8 @@ public final class GameLoop implements Runnable {
             }
 
             if (currentTimeNS - statsTimerNS >= NANOS_PER_SECOND) {
-                currentFPS = frames;
-                currentUPS = updates;
+                currentFps = frames;
+                currentUps = updates;
 
                 frames = 0;
                 updates = 0;
