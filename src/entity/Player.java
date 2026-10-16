@@ -145,10 +145,10 @@ public final class Player implements Renderable, Updatable {
     private void updateAnimation() {
         PlayerAnimationType nextAnimation;
 
-        if (isMoving) {
-            nextAnimation = PlayerAnimationType.WALK;
-        } else if (isAttacking) {
+        if (isAttacking) {
             nextAnimation = PlayerAnimationType.FIRST_ATTACK;
+        } else if (isMoving) {
+            nextAnimation = PlayerAnimationType.WALK;
         } else {
             nextAnimation = PlayerAnimationType.IDLE;
         }
