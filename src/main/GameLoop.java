@@ -10,7 +10,7 @@ public final class GameLoop implements Runnable {
     public static final long TARGET_UPS = 120;
 
     private static final long NANOS_PER_SECOND = TimeUnit.SECONDS.toNanos(1);
-    private static final long SPIN_THRESHOLD_NS = TimeUnit.MILLISECONDS.toNanos(2);
+    private static final long SPIN_THRESHOLD_NS = TimeUnit.MILLISECONDS.toNanos(1);
 
     private volatile boolean keepRunning = false;
     private volatile long timePlayedNS = 0;
